@@ -26,22 +26,16 @@ The driver utilizes a dual-IC closed-loop topology engineered around the classic
 ### 1. The Auxiliary Power Rail Strategy (SX1308)
 To adjust the system's output power seamlessly, the user can vary the main input voltage ($VX$). However, changing $VX$ directly would destabilize the control logic's VCC rail. 
 
-![SX1308 Boost Converter Circuit Diagram](/images/schematic_power_sx1308.png)
-
 To solve this, we implemented the **SX1308 high-frequency boost converter** (U1). It takes the variable input $VX$, filtered by capacitor banks C1, C2, and C3, and locks it into a rock-solid, low-ripple **13V auxiliary rail** to drive the VCC pin of the TL494 (IC1). This guarantees clean gate-drive voltages regardless of the main power loop's shifting potential.
 
 ### 2. Frequency Control and Precision Dead-Time Modification
 Driven by the RC network connected to pins 5 (CT) and 6 (RT) of the TL494 PWM controller.
-
-![TL494 PWM Control and Dead-Time Configuration Schema](/images/schematic_control_tl494.png)
 
 * **Frequency Tuning**: With a 10nF capacitor (C6) and a 1.5K resistor (R7), the fixed setup oscillates around 33kHz ($FS = 1 / (R \times C) = 66\text{kHz} / 2 = 33\text{kHz}$). By replacing R7 with a trimmer, the oscillation frequency can be actively modified on the fly.
 * **Dead-Time Protection**: Pin 4 of the TL494 controls the Dead-Time threshold. Through the voltage divider R6 (4.7K) and R5 (10K) coupled with C5, we enforce a strict hardware-level dead-time. This eliminates any possibility of cross-conduction (shoot-through) in the power MOSFETs during fast transitions.
 
 ### 3. Smart Hardware Current-Limiting Loop (SCT63140 -> TL494 Feedback)
 The output power loop is managed by the **SCT63140 Full-Bridge Switch** (U2), providing robust drive capability to the output terminals.
-
-![SCT63140 Full-Bridge Driver and Current Sensing Circuit](/images/schematic_driver_sct63140.png)
 
 The genius of this architecture lies in its dynamic self-protection loop:
 * The SCT63140 continually tracks the H-bridge current and outputs a proportional real-time analog signal from its **ISNS** pin.
