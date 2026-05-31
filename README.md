@@ -11,7 +11,7 @@ draft: false
 
 ## 📖 Complete Circuit Analysis & Engineering Logs
 For the full mathematical derivations of the TL494 timing logic, SX1308 power conditioning layout, and high-density PCB shielding rules, please read our official engineering documentation:
-👉 **[Read the Full Technical Breakdown at AudioDIYer.com](https://audiodiyer.com/projects/pure-analog-miniature-full-bridge-driver/)**
+👉 **[Read the Full Technical Breakdown at AudioDIYer.com](https://audiodiyer.com/projects/lab-tools/pure-analog-miniature-full-bridge-driver/)**
 
 ---
 
