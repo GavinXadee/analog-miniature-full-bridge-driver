@@ -9,6 +9,12 @@ showToc: true
 draft: false
 ---
 
+## 📖 Complete Circuit Analysis & Engineering Logs
+For the full mathematical derivations of the TL494 timing logic, SX1308 power conditioning layout, and high-density PCB shielding rules, please read our official engineering documentation:
+👉 **[Read the Full Technical Breakdown at AudioDIYer.com](https://audiodiyer.com/projects/pure-analog-miniature-full-bridge-driver/)**
+
+---
+
 ## The Philosophy of Pure Analog Control
 
 In an era flooded with over-engineered microcontroller units (MCUs) that introduce firmware jitter, latency, and sudden crash risks, the elegance of pure analog feedback stands unrivaled. 
@@ -26,16 +32,25 @@ The driver utilizes a dual-IC closed-loop topology engineered around the classic
 ### 1. The Auxiliary Power Rail Strategy (SX1308)
 To adjust the system's output power seamlessly, the user can vary the main input voltage ($VX$). However, changing $VX$ directly would destabilize the control logic's VCC rail. 
 
+<img width="989" height="302" alt="schematic_power_sx1308" src="https://github.com/user-attachments/assets/57249568-1629-43a5-9d51-29883189a413" />
+
+
 To solve this, we implemented the **SX1308 high-frequency boost converter** (U1). It takes the variable input $VX$, filtered by capacitor banks C1, C2, and C3, and locks it into a rock-solid, low-ripple **13V auxiliary rail** to drive the VCC pin of the TL494 (IC1). This guarantees clean gate-drive voltages regardless of the main power loop's shifting potential.
 
 ### 2. Frequency Control and Precision Dead-Time Modification
 Driven by the RC network connected to pins 5 (CT) and 6 (RT) of the TL494 PWM controller.
+
+<img width="893" height="512" alt="schematic_control_tl494" src="https://github.com/user-attachments/assets/5cddf50d-58a5-4658-86d1-30977ab4580e" />
+
 
 * **Frequency Tuning**: With a 10nF capacitor (C6) and a 1.5K resistor (R7), the fixed setup oscillates around 33kHz ($FS = 1 / (R \times C) = 66\text{kHz} / 2 = 33\text{kHz}$). By replacing R7 with a trimmer, the oscillation frequency can be actively modified on the fly.
 * **Dead-Time Protection**: Pin 4 of the TL494 controls the Dead-Time threshold. Through the voltage divider R6 (4.7K) and R5 (10K) coupled with C5, we enforce a strict hardware-level dead-time. This eliminates any possibility of cross-conduction (shoot-through) in the power MOSFETs during fast transitions.
 
 ### 3. Smart Hardware Current-Limiting Loop (SCT63140 -> TL494 Feedback)
 The output power loop is managed by the **SCT63140 Full-Bridge Switch** (U2), providing robust drive capability to the output terminals.
+
+<img width="865" height="611" alt="schematic_driver_sct63140" src="https://github.com/user-attachments/assets/fdad74bd-f615-4510-9882-15a6c344301e" />
+
 
 The genius of this architecture lies in its dynamic self-protection loop:
 * The SCT63140 continually tracks the H-bridge current and outputs a proportional real-time analog signal from its **ISNS** pin.
@@ -60,3 +75,6 @@ This project is fully open-sourced for the community. The repository includes:
 * **Bill of Materials (BOM)**: Exact component values with high-precision 1% feedback resistors specified.
 
 👉 **[Get the Full Hardware Design Files on Our GitHub Repository](https://github.com/GavinXadee/analog-miniature-full-bridge-driver)**
+
+---
+*This project is part of the AudioDIYer Open-Source Hardware Initiative. For advanced audio diagnostics, discrete component matching guides, and ultra-low-noise linear power supply designs, benchmark with us at [AudioDIYer.com](https://audiodiyer.com).*<img width="989" height="302" alt="schematic_power_sx1308" src="https://github.com/user-attachments/assets/a976461f-77cd-4739-a298-172c1a67f2b9" />
